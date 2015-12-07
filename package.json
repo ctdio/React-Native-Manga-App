@@ -1,0 +1,31 @@
+{
+  "name": "react-native-flux-manga-app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "alt": "^0.17.9",
+    "eventemitter3": "^1.1.1",
+    "events": "^1.1.0",
+    "flux": "^2.1.1",
+    "react-native": "^0.16.0",
+    "react-native-button": "^1.3.1",
+    "react-native-router-flux": "^0.3.4",
+    "react-native-scrollable-tab-view": "^0.3.1"
+  },
+  "description": "Manga reader remade with react native.",
+  "main": "index.android.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charlieduong94/React-Native-Manga-App.git"
+  },
+  "author": "Charlie Duong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charlieduong94/React-Native-Manga-App/issues"
+  },
+  "homepage": "https://github.com/charlieduong94/React-Native-Manga-App#readme"
+}
