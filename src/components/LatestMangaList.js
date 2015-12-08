@@ -6,11 +6,15 @@ import React, {
   Text,
   ListView,
   StyleSheet,
+  ToastAndroid,
+  InteractionManager,
   PropTypes
 } from "react-native";
+import MangaItem from "./MangaItem";
 import * as MangaActions from "../actions/mangaActions";
 import MangaConstants from "../constants/mangaConstants";
 import mangaStore from "../stores/mangaStore";
+
 export default class LatestMangaList extends Component{
   static propTypes : {
     navigator : PropTypes.object.isRequired
@@ -25,46 +29,40 @@ export default class LatestMangaList extends Component{
     this.state = {
       dataSource : dataSource
     };
-    // add a listener LATEST RETRIEVED is emitted, run the function callback
-    mangaStore.addLatestListener(this.updateList.bind(this));
+    mangaStore.addListener(MangaConstants.LATEST_RETRIEVED,this.updateList.bind(this));
+  }
+  componentDidMount(){
+    console.log(this.state);
+    InteractionManager.runAfterInteractions(() => {
+      // add a listener LATEST RETRIEVED is emitted, run the function callback
 
-    // since there is nothing that will cause the first event to be called
-    // call action that loads the first set
-    MangaActions.getLatestUpdates();
+      // since there is nothing that will cause the first event to be called
+      // call action that loads the first set
+      MangaActions.getLatestUpdates();
+    });
   }
   // this is the callback for updating the list after the store emits a change
-  updateList(){
-    console.log("This was called to update");
+  updateList(error){
     this.setState({
       dataSource : this.state.dataSource.cloneWithRows(mangaStore.getLatestUpdates())
     });
   }
   render(){
     var {navigator, id} = this.props;
+
     return(
       <ListView
+        onEndReachedThreshold={100}
+        onEndReached={MangaActions.getLatestUpdates}
         dataSource={this.state.dataSource}
         renderRow={(rowData) => {
             return (
-              <View style={styles.container}>
-                <Image style={styles.image}
-                  source={{uri: "https://cdn.mangaeden.com/mangasimg/" + rowData.image}}/>
-                <Text>{rowData.title}</Text>
-              </View>
+              <MangaItem title={rowData.title} image={rowData.image}
+                mangaID={rowData._id} navigator={navigator}
+              />
             );
         }}
       />
     );
   }
 }
-var styles = StyleSheet.create({
-  container : {
-    flex : 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image : {
-    width : 300,
-    height : 300
-  }
-});

@@ -2,10 +2,13 @@
 import dispatcher from "../dispatcher/dispatcher";
 import MangaConstants from "../constants/mangaConstants";
 
-export function getLatestUpdates(page){
-  fetch("http://charlie-duong.com/manga/latestUpdates?page=" + page)
+var latestPage = 0, popularPage = 0;
+
+export function getLatestUpdates(){
+  fetch("http://charlie-duong.com/manga/latestUpdates?page=" + latestPage)
     .then((response) => response.json()) // just get json from response
     .then(function(data){     // handle json
+      latestPage++;
       dispatcher.dispatch({
         actionType : MangaConstants.LATEST_RETRIEVED,
         manga : data.manga
@@ -18,16 +21,16 @@ export function getLatestUpdates(page){
       });
     });
 }
-/*
-export function getPopular(page){
-  fetch("http://charlie-duong.com/manga/popular?page=" + page)
+
+export function getPopularManga(){
+  fetch("http://charlie-duong.com/manga/popular?page=" + popularPage)
     .then((response) => response.json()) // just get json from response
     .then(function(data){     // handle json
-      console.log(data);
+      popularPage++;
       dispatcher.dispatch({
         actionType : MangaConstants.POPULAR_RETRIEVED,
         manga : data.manga
-      })
+      });
     })
     .catch(function(error){
       console.log("request failed " + error);
@@ -37,15 +40,14 @@ export function getPopular(page){
     });
 }
 
-export function search(query, page){
-  fetch("http://charlie-duong.com/manga/search?query="+ query +"&page=" + page)
+export function search(query){
+  fetch("http://charlie-duong.com/manga/search?query="+ query)
     .then((response) => response.json()) // just get json from response
     .then(function(data){     // handle json
-      console.log(data);
       dispatcher.dispatch({
         actionType : MangaConstants.POPULAR_RETRIEVED,
         manga : data.manga
-      })
+      });
     })
     .catch(function(error){
       console.log("request failed " + error);
@@ -54,4 +56,22 @@ export function search(query, page){
       });
     });
 }
-*/
+
+export function getMangaDetails(mangaID){
+  console.log(mangaID);
+  fetch("https://www.mangaeden.com/api/manga/" + mangaID)
+    .then((response) => response.json()) // just get json from response
+    .then(function(data){     // handle json
+      console.log(data);
+      dispatcher.dispatch({
+        actionType : MangaConstants.DETAILS_RETRIEVED,
+        manga : data.manga
+      });
+    })
+    .catch(function(error){
+      console.log("request failed " + error);
+      dispatcher.dispatch({
+        actionType : MangaConstants.ERROR
+      });
+    });
+}

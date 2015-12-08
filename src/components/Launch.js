@@ -16,7 +16,7 @@ export default class Launch extends Component{
     super(props);
   }
   handlePress(){
-    this.props.navigator.replace({id : "MainView"});
+    this.props.navigator.push({id : "Manga List"});
   }
   render(){
     // must use .bind(this) to get access to props
@@ -24,15 +24,12 @@ export default class Launch extends Component{
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome!</Text>
         <Image style={styles.image} source={require("../../assets/images/onePunch.gif")}/>
-
           <View style={styles.button}>
             <TouchableHighlight style={styles.highlight} underlayColor={"#03A9F4"}
               onPress={this.handlePress.bind(this)}>
             <Text style={styles.text}>Tap here to move to next scene</Text>
             </TouchableHighlight>
           </View>
-
-
       </View>
     );
   }

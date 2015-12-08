@@ -2,7 +2,6 @@
 
 import dispatcher from "../dispatcher/dispatcher";
 import MangaConstants from "../constants/mangaConstants";
-
 // Store's state
 var latest = [];
 var popular = [];
@@ -32,26 +31,41 @@ function setFavorites(manga, callback){
 // functions for observers
 var latestUpdatesObservers = [];
 var popularMangaObservers = [];
+
+var observerMap = new Map();
+observerMap.set(MangaConstants.LATEST_RETRIEVED, latestUpdatesObservers);
+observerMap.set(MangaConstants.POPULAR_RETRIEVED, popularMangaObservers);
 // class and public functions
 // acts as a publisher
 class MangaStore{
   constructor(){
 
   }
-  addLatestListener(callback){
-    latestUpdatesObservers.push(callback);
+  addListener(event, callback){
+
+    var observerArray = observerMap.get(event);
+    if(observerArray !== undefined){
+      observerArray.push(callback);
+    }
   }
-  removeLatestListener(callback){
-    for(var i = array.length - 1; i >= 0; i--) {
-      if(latestUpdatesObservers[i] === callback) {
-         array.splice(i, 1);
-       }
+  removeListener(event, callback){
+    var observerArray = observerMap.get(event);
+    if(observerArray !== undefined){
+      for(var i = array.length - 1; i >= 0; i--) {
+        if(latestUpdatesObservers[i] === callback) {
+           observerArray.splice(i, 1);
+         }
+      }
     }
   }
   emit(event){
-    console.log("called");
-    for(var callback of latestUpdatesObservers){
-      callback();
+
+    var observerArray = observerMap.get(event);
+
+    if(observerArray !== undefined){
+      for(var i = 0; i < observerArray.length; i++){
+        observerArray[i]();
+      }
     }
   }
   getLatestUpdates(){
@@ -74,24 +88,21 @@ var mangaStore = new MangaStore();
  **/
 
 dispatcher.register(function(payload){
-  console.log(payload);
   switch(payload.actionType){
     case MangaConstants.LATEST_RETRIEVED:
-      console.log(payload.manga);
-      appendToLatest(payload.manga, function(){
-        console.log("event is emitting");
+      appendToLatest(payload.manga, () => {
         mangaStore.emit(MangaConstants.LATEST_RETRIEVED);
       });
-
       break;
     case MangaConstants.POPULAR_RETRIEVED:
-      appendToPopular(payload.manga);
-      mangaStore.emit(MangaConstants.POPULAR_RETRIEVED);
+      appendToPopular(payload.manga, () => {
+        mangaStore.emit(MangaConstants.POPULAR_RETRIEVED);
+      });
       break;
     case MangaConstants.SEARCH_RETRIEVED:
-      setSearched(payload.manga);
-      mangaStore.emit(MangaConstants.SEARCH_RETRIEVED);
+      //setSearched(payload.manga);
       break;
+
     default:
       // no op
   }
