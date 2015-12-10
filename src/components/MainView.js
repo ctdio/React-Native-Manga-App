@@ -7,9 +7,13 @@ import React, {
   InteractionManager,
   BackAndroid
 } from "react-native";
-import LatestMangaList from "./LatestMangaList"
-import PopularMangaList from "./PopularMangaList"
+import MangaConstants from "../constants/mangaConstants";
+import * as MangaActions from "../actions/mangaActions";
+import MangaList from "./MangaList";
+import mangaStore from "../stores/mangaStore";
 import ScrollableTabView from "react-native-scrollable-tab-view";
+
+
 
 export default class MainView extends Component{
   static propTypes : {
@@ -22,11 +26,21 @@ export default class MainView extends Component{
   render(){
     var {navigator, id} = this.props;
     //<AndroidNavBar navigator={navigator} title={id}/>
+    /*
+
+    */
+
     return(
       <View style={styles.container}>
         <ScrollableTabView>
-          <LatestMangaList tabLabel="Latest" navigator={navigator}/>
-          <PopularMangaList tabLabel="Popular" navigator={navigator}/>
+          <MangaList tabLabel="Latest" navigator={navigator}
+            event={MangaConstants.LATEST_RETRIEVED} onEndReached={MangaActions.getLatestUpdates}
+            onDataRetrieved={mangaStore.getLatestUpdates}
+          />
+          <MangaList tabLabel="Popular" navigator={navigator}
+            event={MangaConstants.POPULAR_RETRIEVED} onEndReached={MangaActions.getPopularManga}
+            onDataRetrieved={mangaStore.getPopularManga}
+          />
         </ScrollableTabView>
       </View>
     );
