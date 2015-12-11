@@ -1,3 +1,6 @@
+/**
+ *  React Component for Manga that is displayed in a list.
+ **/
 "use strict";
 import React, {
   Component,
@@ -13,12 +16,6 @@ import MangaConstants from "../constants/mangaConstants";
 import mangaStore from "../stores/mangaStore";
 
 export default class MangaItem extends Component{
-  static propTypes : {
-    navigator : PropTypes.object.isRequired,
-    title : PropTypes.string.isRequired,
-    image : PropTypes.string.isRequired,
-    mangaID : PropTypes.string.isRequired
-  }
   constructor(props){
     super(props);
   }
@@ -26,11 +23,9 @@ export default class MangaItem extends Component{
     var {navigator, title, image, mangaID} = this.props;
     navigator.push({
       id : "Manga Details",
-      data : {
-          title : title,
-          image : image,
-          mangaID : mangaID
-      }
+      title : title,
+      image : image,
+      mangaID : mangaID
     });
   }
   render(){
@@ -48,14 +43,20 @@ export default class MangaItem extends Component{
     );
   }
 }
+MangaItem.propTypes = {
+  navigator : PropTypes.object.isRequired,
+  title : PropTypes.string.isRequired,
+  image : PropTypes.string.isRequired,
+  mangaID : PropTypes.string.isRequired
+};
 var styles = StyleSheet.create({
   container : {
     flex : 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image : {
-    width : 300,
-    height : 150
+    width : 275,
+    height : 125
   }
 });

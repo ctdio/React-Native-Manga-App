@@ -9,39 +9,62 @@ import React, {
   PropTypes
 } from "react-native";
 import Button from "apsl-react-native-button";
+import ViewPager from "react-native-viewpager";
+
+var pages= [
+  {
+    message : "Welcome!",
+  },
+  {
+    message : "Read manga!",
+  },
+  {
+    message : "Ready?"
+  }
+];
 
 export default class Launch extends Component{
-  static propTypes = {
-    navigator : PropTypes.object.isRequired
-  }
   constructor(props){
     super(props);
+    var dataSource = new ViewPager.DataSource({
+      pageHasChanged : (p1, p2) => p1 !== p2
+    });
+    this.state = {
+      dataSource : dataSource.cloneWithPages(pages)
+    }
   }
-  handlePress(){
+  buttonPressed(){
     this.props.navigator.push({id : "Manga List"});
   }
-  render(){
-    // must use .bind(this) to get access to props
-    /*
-    <View style={styles.button}>
-      <TouchableHighlight style={styles.highlight} underlayColor={"#03A9F4"}
-        onPress={this.handlePress.bind(this)}>
-      <Text style={styles.text}>Tap here to move to next scene</Text>
-      </TouchableHighlight>
-    </View>
-    */
-    return(
+  renderPage(data, pageID){
+    if(pageID == (pages.length - 1)){
+      return(
+        <View style={styles.container}>
+          <Text style={styles.welcome}>{data.message}</Text>
+          <Button onPress={this.buttonPressed.bind(this)} style={styles.button}>
+              Let's go!
+          </Button>
+        </View>
+      );
+    }
+    return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome!</Text>
-        <Image style={styles.image} source={require("../../assets/images/onePunch.gif")}/>
-        <Button style={styles.button}
-          textStyle={styles.text}
-          onPress={this.handlePress.bind(this)}>
-          Continue
-        </Button>
+        <Text style={styles.welcome}>{data.message}</Text>
       </View>
     );
   }
+  render(){
+    return(
+      <ViewPager
+        dataSource={this.state.dataSource}
+        renderPage={this.renderPage}
+        />
+    );
+  }
+}
+
+Launch.propTypes = {
+  navigator : PropTypes.object.isRequired
 }
 var styles = StyleSheet.create({
   container: {

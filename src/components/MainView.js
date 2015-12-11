@@ -13,23 +13,12 @@ import MangaList from "./MangaList";
 import mangaStore from "../stores/mangaStore";
 import ScrollableTabView from "react-native-scrollable-tab-view";
 
-
-
 export default class MainView extends Component{
-  static propTypes : {
-    navigator : PropTypes.object.isRequired,
-    id : PropTypes.string.isRequired
-  }
   constructor(props){
     super(props);
   }
   render(){
     var {navigator, id} = this.props;
-    //<AndroidNavBar navigator={navigator} title={id}/>
-    /*
-
-    */
-
     return(
       <View style={styles.container}>
         <ScrollableTabView>
@@ -48,7 +37,10 @@ export default class MainView extends Component{
 }
 var styles = StyleSheet.create({
   container : {
-    top : 40,
     flex : 1
   }
 });
+MainView.propTypes = {
+  navigator : PropTypes.object.isRequired,
+  id : PropTypes.string.isRequired
+}

@@ -62,10 +62,9 @@ export function getMangaDetails(mangaID){
   fetch("https://www.mangaeden.com/api/manga/" + mangaID)
     .then((response) => response.json()) // just get json from response
     .then(function(data){     // handle json
-      console.log(data);
       dispatcher.dispatch({
         actionType : MangaConstants.DETAILS_RETRIEVED,
-        manga : data.manga
+        details : data
       });
     })
     .catch(function(error){

@@ -14,9 +14,13 @@ import React, {
   TouchableOpacity,
   Navigator
 } from "react-native";
+// import views
 import Launch from "./src/components/Launch";
 import MainView from "./src/components/MainView";
 import MangaDetailsView from "./src/components/MangaDetailsView";
+import ChapterList from "./src/components/ChapterList";
+import ChapterImageViewer from "./src/components/ChapterImageViewer";
+
 import mangaStore from "./src/stores/mangaStore";
 
 var _navigator;
@@ -60,12 +64,20 @@ class ReactNativeFluxMangaApp extends Component{
     super(props);
   }
   renderScene(route, navigator){
+    // for anything else
     switch(route.id){
       case "Manga List":
+        _navigator = navigator;
         return(<MainView id={route.id} navigator={navigator}/>);
       case "Manga Details":
-        return (<MangaDetailsView id={route.id} data={route.data} navigator={navigator}/>);
-      case null:
+        return (<MangaDetailsView id={route.id} title={route.title}
+          image={route.image} mangaID={route.mangaID}
+           navigator={navigator}/>);
+      case "Chapter List":
+        return(<ChapterList chapters={route.chapters}  navigator={navigator} />);
+      case "Chapter Image Viewer":
+        return(<ChapterImageViewer chapterID={route.chapterID}  navigator={navigator} />);
+      default:
         // dirty hack
         _navigator = navigator;
         return(<Launch id={route.id} navigator={navigator}/>);
@@ -75,7 +87,7 @@ class ReactNativeFluxMangaApp extends Component{
   render() {
     return (
       <Navigator
-        initialRoute={{id : null}}
+        initialRoute={{id : "Manga List"}}
         renderScene={this.renderScene}
         sceneStyle={styles.sceneStyle}
         navigationBar={
@@ -115,12 +127,12 @@ var styles = StyleSheet.create({
     marginVertical: 15,
   },
   navBarLeftButton: {
-    paddingLeft: 10,
-    paddingTop : 10
+    paddingLeft: 15,
+    paddingTop : 15
   },
   navBarLeftButtonImage: {
-    width : 35,
-    height : 35,
+    width : 25,
+    height : 25,
   },
   navBarButtonText: {
     color: "white",
@@ -130,7 +142,8 @@ var styles = StyleSheet.create({
     marginVertical: 10,
   },
   sceneStyle : {
-    flex : 1
+    flex : 1,
+    marginTop: 50
   }
 });
 AppRegistry.registerComponent('ReactNativeFluxMangaApp', () => ReactNativeFluxMangaApp);

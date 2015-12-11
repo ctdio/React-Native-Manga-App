@@ -16,12 +16,6 @@ import MangaConstants from "../constants/mangaConstants";
 import mangaStore from "../stores/mangaStore";
 
 export default class MangaList extends Component{
-  static propTypes : {
-    navigator : PropTypes.object.isRequired,
-    event : PropTypes.string.isRequired,
-    onEndReached : PropTypes.func.isRequired,
-    onDataRetrieved : PropTypes.func.isRequired
-  }
   constructor(props){
     super(props);
     // set initial state
@@ -40,11 +34,9 @@ export default class MangaList extends Component{
   }
   componentDidMount(){
     var {event, onEndReached} = this.props;
-    console.log(event);
-    console.log(onEndReached);
     InteractionManager.runAfterInteractions(() => {
       // since there is nothing that will cause the first event to be called
-      // call action that loads the first set
+      // call action that loads the first set of data
       mangaStore.addListener(event, this.updateList.bind(this));
       onEndReached();
     });
@@ -53,9 +45,12 @@ export default class MangaList extends Component{
     var {navigator, onEndReached} = this.props;
     return(
       <ListView
-        onEndReachedThreshold={100}
+        pageSize={10}
+        style={styles.list}
+        onEndReachedThreshold={1000}
         onEndReached={onEndReached}
         dataSource={this.state.dataSource}
+        contentContainerStyle={styles.content}
         renderRow={(rowData) => {
             return (
               <MangaItem title={rowData.title} image={rowData.image}
@@ -67,3 +62,16 @@ export default class MangaList extends Component{
     );
   }
 }
+var styles = StyleSheet.create({
+  content : {
+    flexDirection : "row",
+    flexWrap : "wrap",
+    justifyContent : "space-around",
+  }
+});
+MangaList.propTypes = {
+  navigator : PropTypes.object.isRequired,
+  event : PropTypes.string.isRequired,
+  onEndReached : PropTypes.func.isRequired,
+  onDataRetrieved : PropTypes.func.isRequired
+};
