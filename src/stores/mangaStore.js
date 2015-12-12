@@ -1,7 +1,7 @@
 "use strict";
 
 import dispatcher from "../dispatcher/dispatcher";
-import MangaConstants from "../constants/mangaConstants";
+import mangaConstants from "../constants/mangaConstants";
 import EventEmitter from "EventEmitter";
 // Store's state
 var latest = [];
@@ -43,6 +43,9 @@ class MangaStore extends EventEmitter{
   getMangaDetails(){
     return mangaDetails;
   }
+  getSearchResults(){
+    return searched;
+  }
 }
 
 var mangaStore = new MangaStore();
@@ -56,25 +59,23 @@ var mangaStore = new MangaStore();
 dispatcher.register(function(payload){
   console.log(payload);
   switch(payload.actionType){
-    case MangaConstants.LATEST_RETRIEVED:
+    case mangaConstants.LATEST_RETRIEVED:
       appendToLatest(payload.manga);
-      mangaStore.emit(MangaConstants.LATEST_RETRIEVED);
       break;
-    case MangaConstants.POPULAR_RETRIEVED:
+    case mangaConstants.POPULAR_RETRIEVED:
       appendToPopular(payload.manga);
-      mangaStore.emit(MangaConstants.POPULAR_RETRIEVED);
       break;
-    case MangaConstants.DETAILS_RETRIEVED:
+    case mangaConstants.DETAILS_RETRIEVED:
       setMangaDetails(payload.details);
-      mangaStore.emit(MangaConstants.DETAILS_RETRIEVED);
       break;
-    case MangaConstants.SEARCH_RETRIEVED:
-      //setSearched(payload.manga);
+    case mangaConstants.SEARCH_RETRIEVED:
+      setSearched(payload.manga);
       break;
     default:
       // no op
       break;
   }
+  mangaStore.emit(payload.actionType);
 
 });
 

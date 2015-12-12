@@ -1,7 +1,7 @@
 "use strict";
 
 import dispatcher from "../dispatcher/dispatcher";
-import ChapterConstants from "../constants/chapterConstants";
+import chapterConstants from "../constants/chapterConstants";
 import EventEmitter from "EventEmitter";
 
 var chapterImages = [];
@@ -28,13 +28,13 @@ var chapterStore = new ChapterStore();
 dispatcher.register(function(payload){
   console.log(payload);
   switch(payload.actionType){
-    case ChapterConstants.IMAGES_RETRIEVED:
+    case chapterConstants.IMAGES_RETRIEVED:
       setChapterImages(payload.images);
-      chapterStore.emit(ChapterConstants.IMAGES_RETRIEVED);
       break;
     default:
       //no op
   }
+  chapterStore.emit(payload.actionType);
 });
 
 export default chapterStore;

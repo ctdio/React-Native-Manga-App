@@ -9,9 +9,8 @@ import React, {
   StyleSheet
 } from "react-native";
 import Button from "apsl-react-native-button";
-import * as MangaActions from "../actions/mangaActions";
-import * as ChapterActions from "../actions/chapterActions";
-import MangaConstants from "../constants/mangaConstants";
+import * as mangaActions from "../actions/mangaActions";
+import mangaConstants from "../constants/mangaConstants";
 import mangaStore from "../stores/mangaStore";
 export default class MangaDetailsView extends Component{
   constructor(props){
@@ -23,8 +22,8 @@ export default class MangaDetailsView extends Component{
   componentDidMount(){
     InteractionManager.runAfterInteractions(() => {
       // upon view load, retrieve details on mangaApp and register event
-      mangaStore.addListener(MangaConstants.DETAILS_RETRIEVED, this.updateDetails.bind(this));
-      MangaActions.getMangaDetails(this.props.mangaID);
+      mangaStore.addListener(mangaConstants.DETAILS_RETRIEVED, this.updateDetails.bind(this));
+      mangaActions.getMangaDetails(this.props.mangaID);
     });
   }
   updateDetails(){
@@ -33,7 +32,6 @@ export default class MangaDetailsView extends Component{
       mangaDetails : mangaStore.getMangaDetails()
     });
   }
-
   handlePress(){
     this.props.navigator.push({
       id : "Chapter List",
@@ -53,6 +51,8 @@ export default class MangaDetailsView extends Component{
   renderButton(){
     return(
       <Button onPress={this.handlePress.bind(this)}
+        style={styles.button}
+        textStyle={styles.buttonText}
         isLoading={!this.state.detailsLoaded}>
         View Chapters
       </Button>
@@ -98,17 +98,19 @@ var styles = StyleSheet.create({
   title : {
     fontSize : 30
   },
+  button : {
+    backgroundColor : "#52a9ff"
+  },
+  buttonText : {
+    color : "white"
+  },
   image : {
     width : 200,
     height : 300,
-    resizeMode : "stretch",
+    resizeMode : "cover",
     justifyContent : "center"
   },
   text : {
     fontSize : 18
-  },
-  toolbar : {
-    backgroundColor : "#00BCD4",
-    height : 56,
   }
 });

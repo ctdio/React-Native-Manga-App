@@ -9,15 +9,18 @@ import React, {
   Text,
   StyleSheet,
   TouchableHighlight,
+  PixelRatio,
   PropTypes
 } from "react-native";
-import * as MangaActions from "../actions/mangaActions";
-import MangaConstants from "../constants/mangaConstants";
-import mangaStore from "../stores/mangaStore";
+import Dimensions from "Dimensions";
 
 export default class MangaItem extends Component{
   constructor(props){
     super(props);
+    this.state= {
+      width : Dimensions.get("window").width / 4,
+      height : Dimensions.get("window").height / 6,
+    };
   }
   handlePress(error){
     var {navigator, title, image, mangaID} = this.props;
@@ -27,6 +30,7 @@ export default class MangaItem extends Component{
       image : image,
       mangaID : mangaID
     });
+
   }
   render(){
     var {title, image} = this.props;
@@ -34,10 +38,18 @@ export default class MangaItem extends Component{
       <TouchableHighlight underlayColor={"#03A9F4"}
         onPress={this.handlePress.bind(this)}>
         <View style={styles.container} >
-          <Image style={styles.image}
+          <Image style={{
+              margin : 10,
+              width : this.state.height,
+              height : this.state.width,
+
+            }}
             source={{uri: "https://cdn.mangaeden.com/mangasimg/" + image}}
             defaultSource={require("../../assets/images/not-found.png")}/>
-          <Text>{title}</Text>
+          <View style={styles.textWrapper}>
+            <Text style={styles.text}>{title}</Text>
+          </View>
+
         </View>
       </TouchableHighlight>
     );
@@ -51,12 +63,19 @@ MangaItem.propTypes = {
 };
 var styles = StyleSheet.create({
   container : {
-    flex : 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection : "row",
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   image : {
-    width : 275,
-    height : 125
+    margin : 10,
+  },
+  textWrapper : {
+    flex : 1,
+    paddingRight : 10,
+  },
+  text : {
+    fontSize : 16,
+    textAlign : "center"
   }
 });

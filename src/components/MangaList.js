@@ -11,10 +11,7 @@ import React, {
   PropTypes
 } from "react-native";
 import MangaItem from "./MangaItem";
-import * as MangaActions from "../actions/mangaActions";
-import MangaConstants from "../constants/mangaConstants";
 import mangaStore from "../stores/mangaStore";
-
 export default class MangaList extends Component{
   constructor(props){
     super(props);
@@ -46,7 +43,6 @@ export default class MangaList extends Component{
     return(
       <ListView
         pageSize={10}
-        style={styles.list}
         onEndReachedThreshold={1000}
         onEndReached={onEndReached}
         dataSource={this.state.dataSource}
@@ -64,8 +60,8 @@ export default class MangaList extends Component{
 }
 var styles = StyleSheet.create({
   content : {
-    flexDirection : "row",
-    flexWrap : "wrap",
+    //flexDirection : "row",
+    //WflexWrap : "wrap",
     justifyContent : "space-around",
   }
 });

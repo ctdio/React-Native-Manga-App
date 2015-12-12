@@ -1,6 +1,6 @@
 "use strict";
 import dispatcher from "../dispatcher/dispatcher";
-import MangaConstants from "../constants/mangaConstants";
+import mangaConstants from "../constants/mangaConstants";
 
 var latestPage = 0, popularPage = 0;
 
@@ -10,14 +10,14 @@ export function getLatestUpdates(){
     .then(function(data){     // handle json
       latestPage++;
       dispatcher.dispatch({
-        actionType : MangaConstants.LATEST_RETRIEVED,
+        actionType : mangaConstants.LATEST_RETRIEVED,
         manga : data.manga
       });
     })
     .catch(function(error){
       console.log("request failed " + error);
       dispatcher.dispatch({
-        actionType : MangaConstants.ERROR
+        actionType : mangaConstants.ERROR
       });
     });
 }
@@ -28,31 +28,31 @@ export function getPopularManga(){
     .then(function(data){     // handle json
       popularPage++;
       dispatcher.dispatch({
-        actionType : MangaConstants.POPULAR_RETRIEVED,
+        actionType : mangaConstants.POPULAR_RETRIEVED,
         manga : data.manga
       });
     })
     .catch(function(error){
       console.log("request failed " + error);
       dispatcher.dispatch({
-        actionType : MangaConstants.ERROR
+        actionType : mangaConstants.ERROR
       });
     });
 }
 
 export function search(query){
-  fetch("http://charlie-duong.com/manga/search?query="+ query)
+  fetch("http://charlie-duong.com/manga/search?search="+ query)
     .then((response) => response.json()) // just get json from response
     .then(function(data){     // handle json
       dispatcher.dispatch({
-        actionType : MangaConstants.POPULAR_RETRIEVED,
+        actionType : mangaConstants.SEARCH_RETRIEVED,
         manga : data.manga
       });
     })
     .catch(function(error){
       console.log("request failed " + error);
       dispatcher.dispatch({
-        actionType : MangaConstants.ERROR
+        actionType : mangaConstants.ERROR
       });
     });
 }
@@ -63,14 +63,14 @@ export function getMangaDetails(mangaID){
     .then((response) => response.json()) // just get json from response
     .then(function(data){     // handle json
       dispatcher.dispatch({
-        actionType : MangaConstants.DETAILS_RETRIEVED,
+        actionType : mangaConstants.DETAILS_RETRIEVED,
         details : data
       });
     })
     .catch(function(error){
       console.log("request failed " + error);
       dispatcher.dispatch({
-        actionType : MangaConstants.ERROR
+        actionType : mangaConstants.ERROR
       });
     });
 }

@@ -11,8 +11,8 @@ import React, {
   PropTypes
 } from "react-native";
 import chapterStore from "../stores/chapterStore";
-import * as ChapterActions from "../actions/chapterActions";
-import ChapterConstants from "../constants/chapterConstants";
+import * as chapterActions from "../actions/chapterActions";
+import chapterConstants from "../constants/chapterConstants";
 
 export default class ChapterImageViewer extends Component{
   constructor(props){
@@ -30,16 +30,14 @@ export default class ChapterImageViewer extends Component{
     console.log("component Mounted");
     var {chapterID} = this.props;
     InteractionManager.runAfterInteractions(() => {
-      chapterStore.addListener(ChapterConstants.IMAGES_RETRIEVED, this.updateList.bind(this));
-      ChapterActions.getChapterImages(chapterID);
+      chapterStore.addListener(chapterConstants.IMAGES_RETRIEVED, this.updateList.bind(this));
+      chapterActions.getChapterImages(chapterID);
     });
   }
   updateList(){
-    console.log(chapterStore.getChapterImages());
     this.setState({
       dataSource : this.state.dataSource.cloneWithRows(chapterStore.getChapterImages())
     });
-    console.log(this.state.dataSource);
   }
   render(){
     var {navigator} = this.props;
@@ -48,8 +46,6 @@ export default class ChapterImageViewer extends Component{
         initialListSize={1}
         dataSource={this.state.dataSource}
         renderRow={(rowData) => {
-            console.log("rendered an image");
-            console.log(rowData[1]);
             return (
               <Image
                 style={styles.image}
