@@ -17,9 +17,10 @@ import Dimensions from "Dimensions";
 export default class MangaItem extends Component{
   constructor(props){
     super(props);
+    var imageLength = Math.min(Dimensions.get("window").height, Dimensions.get("window").width) / 4;
+    console.log(imageLength);
     this.state= {
-      width : Dimensions.get("window").width / 4,
-      height : Dimensions.get("window").height / 6,
+      imageLength : imageLength
     };
   }
   handlePress(error){
@@ -40,9 +41,8 @@ export default class MangaItem extends Component{
         <View style={styles.container} >
           <Image style={{
               margin : 10,
-              width : this.state.height,
-              height : this.state.width,
-
+              width : this.state.imageLength,
+              height : this.state.imageLength,
             }}
             source={{uri: "https://cdn.mangaeden.com/mangasimg/" + image}}
             defaultSource={require("../../assets/images/not-found.png")}/>

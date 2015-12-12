@@ -12,7 +12,6 @@ import * as mangaActions from "../actions/mangaActions";
 import MangaList from "./MangaList";
 import mangaStore from "../stores/mangaStore";
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import TabBar from "./MangaViewTabBar";
 export default class MainView extends Component{
   constructor(props){
     super(props);
